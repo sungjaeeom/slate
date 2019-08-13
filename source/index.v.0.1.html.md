@@ -82,7 +82,6 @@ const generateSignature = (secret, nonce, method, path, body = null) => {
 ```
 
 ```php
-<?
 function generateSignature($secret, $nonce, $method, $path, $body = null)
 {
   $_body = $body ? json_encode($body) : '';
@@ -118,7 +117,7 @@ return base64.b64encode(signature.digest())
 4. 3.의 값을 base64로 인코딩합니다. 
 
 <aside class="warning">
-Secret Key는 API Key 발급시 생성됩니다. Secret Key 분실시 <a href="javascript:getApiKey()">API Key</a>를 재발급 받으셔야 합니다.
+Secret Key는 API Key 발급시 생성됩니다. Secret Key 분실시 <a href="https://www.gopax.co.kr/account">API Key</a>를 재발급 받으셔야 합니다.
 </aside>
 
 ## HTTP 헤더 예제
@@ -131,7 +130,7 @@ Content-Type: application/json
 </code>
 
 <aside class="warning">
-위 예제는 테스트에 이용될 수 없습니다. <a href="javascript:getApiKey()">개인 API Key</a>를 통해서 생성해주세요.
+위 예제는 테스트에 이용될 수 없습니다. <a href="https://www.gopax.co.kr/account">개인 API Key</a>를 통해서 생성해주세요.
 </aside>
 
 # 인증이 필요한 API
@@ -252,6 +251,7 @@ Content-Type: application/json
 ```
 ### HTTP 요청
 `GET /orders`
+
 ### 결과값 설명
 <code class="block">
 {
@@ -272,7 +272,7 @@ Content-Type: application/json
 | Amount | 주문 수량 |
 | Trading Pair | 거래 쌍. [거래쌍 목록 조회하기](#ab37bf30de)에서 전체 목록을 확인할 수 있습니다. |
 | Side | 주문 구분 (`buy`: 구매 또는 `sell`: 판매) |
-| Type | 주문 종류 (`limit`: 지정가, `market`: 시장가) |
+| Type | 주문 종류 (`limit`: 지정가) |
 | Created At | 주문 시각 |
 
 <aside class="notice">
@@ -296,9 +296,12 @@ ISO 8601 타임스탬프를 이용하고 있습니다.
   "createdAt": "2018-01-08T12:44:03.000Z"
 }
 ```
-### HTTP 요청signature_b64
+### HTTP 요청
+
 `GET /orders/<Order Id>`
+
 ### 결과값 설명
+
 <code class="block">
 {
   "id": <i style="color: black;">[ID]</i>,
@@ -318,7 +321,7 @@ ISO 8601 타임스탬프를 이용하고 있습니다.
 | ID	| 주문 고유번호 |
 | Status | 상태 placed: 주문됨, cancelled: 취소됨, completed: 체결됨, updated: 부분 체결됨 |
 | Side | 주문 구분 (`buy`: 구매, `sell`: 판매) |
-| Type | 주문 종류 (`limit`: 지정가, `market`: 시장가) |
+| Type | 주문 종류 (`limit`: 지정가) |
 | Price | 주문 가격 |
 | Amount | 주문 수량 |
 | Trading Pair | 거래 쌍. [거래쌍 목록 조회하기](#ab37bf30de)에서 전체 목록을 확인할 수 있습니다. |
@@ -330,19 +333,9 @@ ISO 8601 타임스탬프를 이용하고 있습니다.
 
 ## 주문 등록하기
 
-> 예제 :
+> ETH-KRW를 지정가로 100만원에 ETH 10개 매수 예제
 
-```python
-import time, base64, hmac, hashlib, requests, json
-
-apikey = '' 
-secret = ''  
-nonce = str(time.time())
-method = 'POST'
-request_path = '/orders'
-
-request_body = 
-# ETH-KRW를 지정가로 100만원에 ETH 10개 매수
+```json
 {
     "type": "limit",
     "side": "buy",
@@ -350,176 +343,12 @@ request_body =
     "amount": 10,
     "tradingPairName": "ETH-KRW"
 }
-# ETH-KRW를 시장가로 ETH 10개 매도
-{
-      "type": "market",
-      "side": "sell",
-      "amount": 10,
-      "tradingPairName": "ETH-KRW"
-}
-# ETH-KRW를 시장가로 100만원어치의 이더리움을 구매
-{
-    "type": "market",
-    "side": "buy",
-    "amount": 1000000,
-    "tradingPairName": "ETH-KRW"
-}
-
-what = nonce + method + request_path + json.dumps(request_body,sort_keys=True)
-key = base64.b64decode(secret)
-signature = hmac.new(key, str(what).encode('utf-8'), hashlib.sha512)
-signature_b64 = base64.b64encode(signature.digest())
-
-custom_headers = {
-	'API-Key': apikey,
-	'Signature': signature_b64,
-	'Nonce': nonce
-}
-								
-def main():
-	req = requests.post(url = 'https://api.gopax.co.kr' + request_path, headers = custom_headers,json=request_body)
-
-	if req.ok:
-		print(req.text)
-	else:
-		print ('요청 에러')
-		print(req.text)
- 
-if __name__ == '__main__':
-	main()
-```
-```javascript
-var crypto = require('crypto');
-var request = require('request');
-
-var apikey = '';
-var secret = '';
-var nonce = Date.now() * 1000;
-var method = 'POST';
-var requestPath = '/orders';
-var json_body = 
-// ETH-KRW를 지정가로 100만원에 ETH 10개 매수
-{
-    type: "limit",
-    side: "buy",
-    price: 1000000,
-    amount: 10,
-    tradingPairName: "ETH-KRW"
-};
-// ETH-KRW를 시장가로 ETH 10개 매도
-{
-    type: "market",
-    side: "sell",
-    amount: 10,
-    tradingPairName: "ETH-KRW"
-};
-// ETH-KRW를 시장가로 100만원어치의 이더리움을 구매
-{
-    type: "market",
-    side: "buy",
-    amount: 1000000,
-    tradingPairName: "ETH-KRW"
-};
-
-var body = JSON.stringify(json_body, Object.keys(json_body).sort());
-var what = nonce + method + requestPath + body;
-var key = Buffer(secret, 'base64');
-var hmac = crypto.createHmac('sha512', key);
-var sign = hmac.update(what).digest('base64');
-
-var host = 'api.gopax.co.kr';
-
-var options = {
-  method,
-  body: json_body,
-  json: true,
-  url: `https://${host}${requestPath}`,
-  headers: {
-    API-KEY: apikey,
-    Signature: sign,
-    Nonce: nonce
-  },
-  strictSSL: false,
-};
-
-request(options, (err, response, b) => {
-  if (err) {
-    console.log('err:', err);
-    return;
-  }
-  console.log(b);
-});
-```
-
-```php
-<?
-private apiKey = '';
-private apiSecret = '';
-
-const API_HOST = 'https://api.gopax.co.kr';
-const VERSION = 'gopax-php-sdk-20171216';
-
-private function request(string $method, string $path, $request = NULL)
-{
-    $curl = curl_init();
-
-    $mt = explode(' ', microtime());
-    $nonce     = $mt[1] . substr($mt[0], 2, 6);
-    $method    = strtoupper($method);
-
-    $tokenizedPath = explode('?', $path);
-    $requestPath   = $tokenizedPath[0];
-    $what          = $nonce . $method . $requestPath . $request;
-    $secret        = base64_decode($this->apiSecret);
-    $signature     = base64_encode(hash_hmac('sha512', $what, $secret, true));
-    
-    $headers[] = 'Content-Type: application/json';
-    $headers[] = 'API-KEY: ' . $this->apiKey;
-    $headers[] = 'SIGNATURE: ' . $signature;
-    $headers[] = 'NONCE: ' . $nonce;
-    curl_setopt($curl, CURLOPT_USERAGENT, self::VERSION);
-    curl_setopt($curl, CURLOPT_URL, self::API_HOST . $path);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($curl, CURLOPT_POST, TRUE);
-    curl_setopt($curl, CURLOPT_POSTFIELDS, $postData);
-    
-    $json       = curl_exec($curl);
-    $httpStatus = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-    curl_close($curl);
-    
-    return new Response($httpStatus, $json);
-}
-
-public function setParameter(string $type, string $side, float $price, float $amount, string $tradingPairName)
-{
-    $data['type']            = $type; // LIMIT, MARKET
-    $data['side']            = $side; // BUY, SELL
-    $data['price']           = $price;
-    $data['amount']          = $amount;
-    $data['tradingPairName'] = $tradingPairName;
-    return json_encode($data);
-}
-
-$orderRequest = setParameter(
-  // ETH-KRW를 지정가로 100만원에 ETH 10개 매수
-   'limit', 'buy', 10000000, 0.1, 'ETH-KRW'
- );
- (
-   // ETH-KRW를 시장가로 ETH 10개 매도
-   'market', 'sell', 0, 10, 'ETH-KRW'
- );
- (
-   // ETH-KRW를 시장가로 100만원어치의 이더리움을 구매
-   'market', 'buy', 0, 1000000,'ETH-KRW'
- );
-
-print_r($this->request('POST','/orders',$orderRequest));
-    
 ```
 
 ### HTTP 요청
+
 `POST /orders`
+
 ### 요청 본문 설명
 
 <code class="block" >
@@ -534,7 +363,7 @@ print_r($this->request('POST','/orders',$orderRequest));
 
 | 값 | 설명 |
 | --- | --- |
-| Type | 주문 종류 (`limit`: 지정가, `market`: 시장가) |
+| Type | 주문 종류 (`limit`: 지정가) |
 | Side | 주문 구분 (`buy`: 구매 또는 `sell`: 판매) |
 | Price | 주문 가격 |
 | Amount | 주문 수량 |
@@ -578,12 +407,13 @@ print_r($this->request('POST','/orders',$orderRequest));
 | Amount | 주문 수량 |
 | Trading Pair | 거래 쌍. [거래쌍 목록 조회하기](#ab37bf30de)에서 전체 목록을 확인할 수 있습니다. |
 | Side | 주문 구분 (`buy`: 구매 또는 `sell`: 판매) |
-| Type | 주문 종류 (`limit`: 지정가, `market`: 시장가) |
+| Type | 주문 종류 (`limit`: 지정가) |
 | Created At | 주문 시각 |
 
 <aside class="notice">
 ISO 8601 타임스탬프를 이용하고 있습니다.
 </aside>
+
 
 ## 주문 ID로 주문 취소하기
 
@@ -631,7 +461,7 @@ ISO 8601 타임스탬프를 이용하고 있습니다.
 ]
 ```
 ### HTTP 요청
-`GET /trades?limit=[limit]&pastmax=[pastmax]&latestmin=[latestmin]&after=[after]&before=[before]`
+`GET /trades`
 
 ### Query 파라미터
 
@@ -768,7 +598,7 @@ ISO 8601 타임스탬프를 이용하고 있습니다.
 ## 최근 체결 거래 조회하기
 
 ### HTTP 요청
-`GET /trading-pairs/<Trading Pair>/trades?limit=[limit]&pastmax=[pastmax]&latestmin=[latestmin]&after=[after]&before=[before]`
+`GET /trading-pairs/<Trading Pair>/trades`
 
 ### URL 파라미터
 | 파라미터 | 설명 |
@@ -822,7 +652,7 @@ ISO 8601 타임스탬프를 이용하고 있습니다.
   "id": <i style="color: black;">[ID]</i>,
   "price": <i style="color: black;">[Price]</i>,
   "amount": <i style="color: black;">[Amount]</i>,
-  "side": <i style="color: black;">[Side]</i>
+  "side": <i style="color: black;">[Side]</i>,
 }
 </code>
 
@@ -865,7 +695,7 @@ ISO 8601 타임스탬프를 이용하고 있습니다.
   "low": <i style="color: black;">[Low]</i>,
   "close": <i style="color: black;">[Close]</i>,
   "volume": <i style="color: black;">[Volume]</i>,
-  "time": <i style="color: black;">[Time]</i>
+  "time": <i style="color: black;">[Time]</i>,
 }
 </code>
 
@@ -879,7 +709,7 @@ ISO 8601 타임스탬프를 이용하고 있습니다.
 | Time | 최근 데이터 갱신 시각 |
 
 <aside class="notice">
-ISO 8601 타임스탬프를 이용하고 있습니다. 
+ISO 8601 타임스탬프를 이용하고 있습니다.
 </aside>
 
 ## 과거 기록 조회하기
@@ -895,7 +725,7 @@ ISO 8601 타임스탬프를 이용하고 있습니다.
     10081000,
     10081000,
     0.0398393
-  ],
+  ]</i>,
   [
     1521004080000,
     10081000,
@@ -1049,5 +879,3 @@ ISO 8601 타임스탬프를 이용하고 있습니다.
 
 
 © Streami, Inc. 모든 권리 보유.
-
-

@@ -47,9 +47,29 @@ html, body {
   width: 20px;
 }
 
+
+
+select {
+  border: 0px;
+  -webkit-appearance: none;  /* 네이티브 외형 감추기 */
+  -moz-appearance: none;
+  appearance: none;
+  background-color: $lang-select-bg;
+  color: $lang-select-active-text;
+  position: fixed;
+  line-height: 30px; 
+  vertical-align: middle;
+  right: 2rem;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+/* IE 10, 11의 네이티브 화살표 숨기기 */
+select::-ms-expand {
+  display: none;
+}
+
 .toc-wrapper {
   transition: left 0.3s ease-in-out;
-
   overflow-y: auto;
   overflow-x: hidden;
   position: fixed;
@@ -71,11 +91,12 @@ html, body {
     }
   }
 
+
   // This is the logo at the top of the ToC
   .logo {
     display: block;
     max-width: 100%;
-    margin-bottom: $logo-margin;
+    margin: $logo-margin;
   }
 
   &>.search {
@@ -168,7 +189,7 @@ html, body {
     background-color: $nav-subitem-bg;
     font-weight: 500;
   }
-
+  z-index: 100;
   .toc-h2 {
     padding-left: $nav-padding + $nav-indent;
     font-size: 12px;
@@ -189,7 +210,7 @@ html, body {
     }
 
     li {
-      font-size: 0.8em;
+      font-size: 13px;
       line-height: 1.7;
       text-decoration: none;
     }
@@ -274,6 +295,21 @@ html, body {
     position: fixed;
     z-index: 50;
     border-bottom: 5px solid $lang-select-active-bg;
+  }
+
+  .language-change {
+    width: 150px;
+    line-height: 30px; 
+    background-color: transparent;
+    position: relative;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 999;
+    vertical-align: middle;
+    padding-right: 0.5rem;
+    font-size: 0.8em;
+    font-weight: bold;
   }
 }
 

@@ -66,7 +66,7 @@
     if (event.keyCode === 27) searchInput.value = '';
 
     if (searchInput.value) {
-      var results = index.search(searchInput.value).filter(function(r) {
+      var results = index.search(encodeURIComponent(searchInput.value)).filter(function(r) {
         return r.score > 0.0001;
       });
 
