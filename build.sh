@@ -12,11 +12,8 @@ copy_generated_file(){
   echo $pDir
   target="docs"
   path=$(dirname `pwd`)$sep$pDir$sep$target
-
-  # echo $searchdir
-  # path=$(find $searchdir -name `echo '$1'`)
   echo $path
-  # cp build $path/docs
+
   if [[ ! -z $pDir ]] 
   then
     cp -r build/* $path

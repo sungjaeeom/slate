@@ -11,10 +11,7 @@ toc_footers:
   - <a href='javascript:getApiKey()'>Issue API Key</a>
   - <a href='javascript:apiGitHome()'>Github</a>
 
-toc_footers_add:
-  - API history
-  - <a href='javascript:goAPIhistory("")' >latest</a>
-  - <a href='javascript:goAPIhistory(".v.0.1")' >V0.1</a> 
+
 
 lang_change: true
 
@@ -31,43 +28,37 @@ The following documents are shared to enable you to use some of the features of 
 
 ## API Endpoint (URL)
 
-GOPAX REST API provides endpoints for account/order management and public market data.
+GOPAX REST API menyediakan endpoints untuk manajemen akun/pemesanan dan data pasar publik.
 
-<code id="apiUrl" ></code>
+<code id="apiUrl" >https://api.gopax.co.id</code>
 
 ## API Call Rate Limit
 
-When the API call rate limit is exceeded, the status code 429 - Too Many Requests will be returned.
-
-The rate is limited per IP for Public API and per API Key for Private API. At most 20 calls can be made within the 1 second moving window, respectively.
+Ketika batas pemanggilan API terlampaui, status kode 429 - Too Many Requests akan dikembalikan.
 
 ## Request/Response Format
 
-The content-type for all requests and responses is application/json, and follows typical HTTP response status codes. For example, a successful request will return status code 200.
+Content-type untuk semua request dan response adalah application/json, dan mengikuti standar status kode response HTTP. Sebagai contoh, permintaan berhasil akan mengembalikan status kode 200.
 
 # Private API Authentication
 
-In order to authenticate for the Private API, the following HTTP header must be included in the REST request.
+Untuk proses autentikasi private API, REST request harus berisi HTTP header di bawah ini.
 
-1. API-KEY: the issued API Key
-2. SIGNATURE: the message signature value (further description below)
-3. NONCE: a constantly increasing non-redundant value (typically, timestamp)
-
-<aside class="success">
-You can issue two or more API keys.
-</aside>
+1. API-KEY:theissuedAPIkey
+2. SIGNATURE: the message signature value (penjelasan detail di bawah)
+3. NONCE:aconstantlyincreasingnon-redundantvalue(typically,timestamp)
 
 <aside class="warning">
-If identical NONCE values are used, the server will reject the request.
+Jika nilai NONCE yang sama digunakan, maka server akan menolak request tersebut.
 </aside>
 
 <aside class="notice">
-The content-type of the HTTP body should be application/json.
+Content-type HTTP body harus application/json.
 </aside>
 
-## SIGNATURE formation procedure
+## SIGNATURE digenerate berdasarkan prosedur berikut.
 
-> The below is example :
+> Example :
 
 ```javascript
 const crypto = require('crypto');
@@ -109,18 +100,13 @@ signature = hmac.new(key, what, hashlib.sha512)
 return base64.b64encode(signature.digest())
 ```
 
-
-1. Perform string-concatenation of the following in order.
-  1. NONCE of the header
-  2. HTTP method (ALL CAPS): 'GET', 'POST', 'DELETE' or such
-  3. API endpoint URL (e.g. '/orders', '/trading-pairs/ETH-IDR/book')
-  4. Request parameter body in JSON format (if not applicable, do not add any string)
-2. Decode the issued secret in base64.
-3. Use the value from 2. as the secret key and sign as sha512 HMAC.
-4. Encode the value from 3. in base64.
+1. Lakukan proses string-concatenation dengan urutan di bawah ini.
+2. Decodeissuedsecretdenganbase64
+3. Gunakan hasil dari nomor 2 sebagai secret key untuk sha512 HMAC
+4. Encode value dari nomor 3 dengan base64
 
 <aside class="warning">
-The Secret Key is generated when the API key is issued. If the Secret Key is lost, you must reissue the <a href="https://www.gopax.co.kr/account">API Key</a>.
+Kunci Rahasia dihasilkan ketika kunci API dikeluarkan. Jika Kunci Rahasia hilang, Anda harus menerbitkan kembali <a href="javascript:getApiKey()">Kunci API</a>.
 </aside>
 
 ## HTTP header example
@@ -133,7 +119,7 @@ Content-Type: application/json
 </code>
 
 <aside class="warning">
-The above example cannot be used for testing. Create it through <a href="https://www.gopax.co.kr/account">personal API Key</a>
+The above example cannot be used for testing. Create it through <a href="javascript:getApiKey()">personal API Key</a>
 </aside>
 
 # Authenticated Calls
@@ -145,7 +131,7 @@ The above example cannot be used for testing. Create it through <a href="https:/
 ```json
 [
   {
-    "asset": "KRW",
+    "asset": "IDR",
     "avail": 9101080.53,
     "hold": 0,
     "pendingWithdrawal": 0
@@ -184,7 +170,7 @@ The above example cannot be used for testing. Create it through <a href="https:/
 
 | Value | Description |
 | --- | --- |
-| Asset Name | Asset Name. You can view the entire list in the [Asset List Query] |
+| Asset Name | Asset Name. You can view the entire list in the [Asset List Query](#get-assets) |
 | Avail | Transactionable Amount (Quantity) |
 | Hold | Outstanding Amount(Quantity) |
 | Pending Withdrawal | Amount in Withdrawal(Quantity) |
@@ -195,7 +181,7 @@ The above example cannot be used for testing. Create it through <a href="https:/
 
 ```json
 {
-  "asset": "KRW",
+  "asset": "IDR",
   "avail": 9101080.53,
   "hold": 0,
   "pendingWithdrawal": 0
@@ -207,7 +193,7 @@ The above example cannot be used for testing. Create it through <a href="https:/
 
 | parameter | Description |
 | --- | --- |
-| Asset Name | Asset Name. You can view the entire list in the [Asset List Query] |
+| Asset Name | Asset Name. You can view the entire list in the [Asset List Query](#get-assets) |
 
 ### Description of Response
 
@@ -237,7 +223,7 @@ The above example cannot be used for testing. Create it through <a href="https:/
     "id": "23712",
     "price": 101,
     "amount": 100,
-    "tradingPairName": "CND-KRW",
+    "tradingPairName": "CND-IDR",
     "side": "sell",
     "type": "limit",
     "createdAt": "2018-01-08T12:44:03.000Z"
@@ -245,7 +231,7 @@ The above example cannot be used for testing. Create it through <a href="https:/
     "id": "23916",
     "price": 90,
     "amount": 30,
-    "tradingPairName": "CND-KRW",
+    "tradingPairName": "CND-IDR",
     "side": "buy",
     "type": "limit",
     "createdAt": "2018-01-09T10:43:10.000Z"
@@ -275,11 +261,15 @@ The above example cannot be used for testing. Create it through <a href="https:/
 | Amount | Order amount |
 | Trading Pair | Trading Pair. You can check the entire list in the [trading pair list] query. |
 | Side | Trading Type (`buy`, `sell`) |
-| Type | Order Type (`limit`) |
+| Type | Order Type (`limit`, `market`) |
 | Created At | Order Time |
 
 <aside class="notice">
-All API timestamps is returned in microseconds according to the ISO 8601 format.
+Terdapat dua jenis order, limit dan market. Order hanya dapat dilakukan jika terdapat saldo yang cukup pada akun. Sekali order dilakukan, saldo tersebut ditunda selama durasi pemesanan. Jenis dan jumlah aset yang ditahan ditentukan oleh jenis pemesanan dan parameter yang ditentukan.
+</aside>
+
+<aside class="notice">
+Semua API timestamp mengembalikan dalam microsecond mengikuti standar format ISO 8601. Hampir semua bahasa pemrograman dan framework modern mendukung format ini.
 </aside>
 
 ## Get order by order ID
@@ -295,13 +285,16 @@ All API timestamps is returned in microseconds according to the ISO 8601 format.
   "price": 101,
   "amount": 100,
   "remaining": 100,
-  "tradingPairName": "CND-KRW",
+  "tradingPairName": "CND-IDR",
   "createdAt": "2018-01-08T12:44:03.000Z"
 }
 ```
 ### HTTP request
+
 `GET /orders/<Order Id>`
+
 ### Description of Response
+
 <code class="block">
 {
   "id": <i style="color: black;">[ID]</i>,
@@ -316,34 +309,212 @@ All API timestamps is returned in microseconds according to the ISO 8601 format.
 }
 </code>
 
-| Value | DEscription |
+| Value | Description |
 | --- | --- |
 | ID	| Unique No. of order |
 | Status | 상태 placed: 주문됨, cancelled: 취소됨, completed: 체결됨, updated: 부분 체결됨 |
 | Side | Trading Type (`buy` , `sell`) |
-| Type | Order Type (`limit`) |
+| Type | Order Type (`limit`, `market`) |
 | Price | Order Price |
 | Amount | Order Amount |
 | Trading Pair | Trading Pair. You can check the entire list in the [trading pair list] query. |
 | Created At | Order Time |
 
 <aside class="notice">
-All API timestamps is returned in microseconds according to the ISO 8601 format
+Semua API timestamp mengembalikan dalam microsecond mengikuti standar format ISO 8601. Hampir semua bahasa pemrograman dan framework modern mendukung format ini.
 </aside>
 
 ## Place order
 
-> Example of buying ETH-KRW by limit order
+> Example :
 
-```json
+```python
+import time, base64, hmac, hashlib, requests, json
+
+apikey = ''
+secret = ''
+nonce = str(time.time())
+method = 'POST'
+request_path = '/orders'
+
+request_body = 
+# Example of buying ETH-IDR by limit order
 {
     "type": "limit",
     "side": "buy",
     "price": 1000000,
     "amount": 10,
-    "tradingPairName": "ETH-KRW"
+    "tradingPairName": "ETH-IDR"
 }
+# Example of selling ETH-IDR by market order
+{
+      "type": "market",
+      "side": "sell",
+      "amount": 10,
+      "tradingPairName": "ETH-IDR"
+}
+# Example of buying ETH-IDR by market order
+{
+    "type": "market",
+    "side": "buy",
+    "amount": 1000000,
+    "tradingPairName": "ETH-IDR"
+}
+
+what = nonce + method + request_path + json.dumps(request_body,sort_keys=True)
+key = base64.b64decode(secret)
+signature = hmac.new(key, str(what).encode('utf-8'), hashlib.sha512)
+signature_b64 = base64.b64encode(signature.digest())
+
+custom_headers = {
+	'API-Key': apikey,
+	'Signature': signature_b64,
+	'Nonce': nonce
+}
+								
+def main():
+	req = requests.post(url = 'API Endpoint URL' + request_path, headers = custom_headers,json=request_body)
+
+	if req.ok:
+		print(req.text)
+
+	else:
+		print ('요청 에러')
+		print(req.text)
+ 
+if __name__ == '__main__':
+	main()
 ```
+```javascript
+var crypto = require('crypto');
+var request = require('request');
+
+var apikey = '';
+var secret = '';
+var nonce = Date.now() * 1000;
+var method = 'POST';
+var requestPath = '/orders';
+var json_body = 
+// Example of buying ETH-IDR by limit order 
+{
+    type: "limit",
+    side: "buy",
+    price: 1000000,
+    amount: 10,
+    tradingPairName: "ETH-IDR"
+};
+// Example of selling ETH-IDR by market order
+{
+    type: "market",
+    side: "sell",
+    amount: 10,
+    tradingPairName: "ETH-IDR"
+};
+// Example of buying ETH-IDR by market order
+{
+    type: "market",
+    side: "buy",
+    amount: 1000000,
+    tradingPairName: "ETH-IDR"
+};
+
+var body = JSON.stringify(json_body, Object.keys(json_body).sort());
+var what = nonce + method + requestPath + body;
+var key = Buffer(secret, 'base64');
+var hmac = crypto.createHmac('sha512', key);
+var sign = hmac.update(what).digest('base64');
+
+var host = 'API Endpoint URL without protocol';
+
+var options = {
+  method,
+  body: json_body,
+  json: true,
+  url: `https://${host}${requestPath}`,
+  headers: {
+    'API-KEY': apikey,
+    Signature: sign,
+    Nonce: nonce
+  },
+  strictSSL: false,
+};
+
+request(options, (err, response, b) => {
+  if (err) {
+    console.log('err:', err);
+    return;
+  }
+  console.log(b);
+});
+```
+
+```php
+<?
+private apiKey = '';
+private apiSecret = '';
+
+const API_HOST = 'API Endpoint URL';
+const VERSION = 'gopax-php-sdk-20171216';
+
+private function request(string $method, string $path, $request = NULL)
+{
+    $curl = curl_init();
+
+    $mt = explode(' ', microtime());
+    $nonce     = $mt[1] . substr($mt[0], 2, 6);
+    $method    = strtoupper($method);
+
+    $tokenizedPath = explode('?', $path);
+    $requestPath   = $tokenizedPath[0];
+    $what          = $nonce . $method . $requestPath . $request;
+    $secret        = base64_decode($this->apiSecret);
+    $signature     = base64_encode(hash_hmac('sha512', $what, $secret, true));
+    
+    $headers[] = 'Content-Type: application/json';
+    $headers[] = 'API-KEY: ' . $this->apiKey;
+    $headers[] = 'SIGNATURE: ' . $signature;
+    $headers[] = 'NONCE: ' . $nonce;
+    curl_setopt($curl, CURLOPT_USERAGENT, self::VERSION);
+    curl_setopt($curl, CURLOPT_URL, self::API_HOST . $path);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($curl, CURLOPT_POST, TRUE);
+    curl_setopt($curl, CURLOPT_POSTFIELDS, $postData);
+    
+    $json       = curl_exec($curl);
+    $httpStatus = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+    curl_close($curl);
+    
+    return new Response($httpStatus, $json);
+}
+
+public function setParameter(string $type, string $side, float $price, float $amountPlace or, string $tradingPairName)
+{
+    $data['type']            = $type; // LIMIT, MARKET
+    $data['side']            = $side; // BUY, SELL
+    $data['price']           = $price;
+    $data['amount']          = $amount;
+    $data['tradingPairName'] = $tradingPairName;
+    return json_encode($data);
+}
+
+$orderRequest = setParameter(
+  //Example of buying ETH-IDR by limit order
+   'limit', 'buy', 10000000, 0.1, 'ETH-IDR'
+ );
+ (
+   // Example of selling ETH-IDR by market order
+   'market', 'sell', 0, 10, 'ETH-IDR'
+ );
+ (
+   // Example of buying ETH-IDR by market order
+   'market', 'buy', 0, 1000000,'ETH-IDR'
+ );
+
+print_r($this->request('POST','/orders',$orderRequest));
+    
+```
+
 
 ### HTTP request
 `POST /orders`
@@ -362,15 +533,12 @@ All API timestamps is returned in microseconds according to the ISO 8601 format
 
 | 값 | Description |
 | --- | --- |
-| Type | Order Type (`limit`) |
+| Type | Order Type (`limit`, `market`) |
 | Side | Trading Type (`buy`, `sell`) |
 | Price | Order Price |
 | Amount | Order Amount |
 | Trading Pair | Trading Pair. You can check the entire list in the [trading pair list] query. |
 
-<aside class="warning">
-When ordered at market price, Amount is the total amount of assets to be purchased or sold (KRW for purchase in ETH-KRW and ETH for sale in ETH-KRW).
-</aside>
 
 ### Description of Response
 > Response : 
@@ -380,7 +548,7 @@ When ordered at market price, Amount is the total amount of assets to be purchas
   "id": "98723",
   "price": 750000,
   "amount": 9,
-  "tradingPairName": "ETH-KRW",
+  "tradingPairName": "ETH-IDR",
   "side": "buy",
   "type": "limit",
   "createdAt": "2018-01-09T10:43:10.000Z"
@@ -405,11 +573,15 @@ When ordered at market price, Amount is the total amount of assets to be purchas
 | Amount | Order Amount |
 | Trading Pair | Trading Pair. You can check the entire list in the [trading pair list] query. |
 | Side | Trading Type (`buy`, `sell`) |
-| Type | Order Type (`limit`) |
+| Type | Order Type (`limit`, `market`) |
 | Created At | Order Time |
 
 <aside class="notice">
-All API timestamps is returned in microseconds according to the ISO 8601 format.
+Semua API timestamp mengembalikan dalam microsecond mengikuti standar format ISO 8601. Hampir semua bahasa pemrograman dan framework modern mendukung format ini.
+</aside>
+
+<aside class="warning">
+Silakan periksa <a href="#api-endpoint-url">API Endpoint URL</a>.
 </aside>
 
 ## Cancel order by order ID
@@ -444,7 +616,7 @@ All API timestamps is returned in microseconds according to the ISO 8601 format.
     "price": 10330500,
     "timestamp": "2018-03-10T16:07:32.000Z",
     "side": "buy",
-    "tradingPairName": "BTC-KRW"
+    "tradingPairName": "BTC-IDR"
   }, {
     "id": 23302,
     "orderId": 23916,
@@ -454,12 +626,12 @@ All API timestamps is returned in microseconds according to the ISO 8601 format.
     "price": 10332000,
     "timestamp": "2018-03-10T16:03:54.000Z",
     "side": "buy",
-    "tradingPairName": "BTC-KRW"
+    "tradingPairName": "BTC-IDR"
   }
 ]
 ```
 ### HTTP request
-`GET /trades`
+`GET /trades?limit=[limit]&pastmax=[pastmax]&latestmin=[latestmin]&after=[after]&before=[before]`
 
 ### Query String Parameter
 
@@ -500,7 +672,7 @@ All API timestamps is returned in microseconds according to the ISO 8601 format.
 | Trading Pair | Trading Pair. You can check the entire list in the [trading pair list] query. |
 
 <aside class="notice">
-All API timestamps is returned in microseconds according to the ISO 8601 format
+Semua API timestamp mengembalikan dalam microsecond mengikuti standar format ISO 8601. Hampir semua bahasa pemrograman dan framework modern mendukung format ini.
 </aside>
 
 # Unauthenticated Calls
@@ -511,14 +683,14 @@ All API timestamps is returned in microseconds according to the ISO 8601 format
 ```json
 [
   {
-    "id": "KRW",
-    "name": "대한민국 원"
+    "id": "IDR",
+    "name": "Rupiah"
   }, {
     "id": "ETH",
-    "name": "이더리움"
+    "name": "Ethereum"
   }, {
     "id": "BTC",
-    "name": "비트코인"
+    "name": "Bitcoin"
   }
 ]
 ```
@@ -534,17 +706,17 @@ You can view a list of all assets handled by GOPAX.
 ```json
 [
   {
-    "name": "ETH-KRW",
+    "name": "ETH-IDR",
     "baseAsset": "ETH",
-    "quoteAsset": "KRW"
+    "quoteAsset": "IDR"
   }, {
-    "name": "BTC-KRW",
+    "name": "BTC-IDR",
     "baseAsset": "BTC",
-    "quoteAsset": "KRW"
+    "quoteAsset": "IDR"
   }, {
-    "name": "BCH-KRW",
+    "name": "BCH-IDR",
     "baseAsset": "BCH",
-    "quoteAsset": "KRW"
+    "quoteAsset": "IDR"
   }
 ]
 ```
@@ -573,7 +745,7 @@ You can view a list of all assets handled by GOPAX.
 | Trading Pair | Trading Pair. You can check the entire list in the [trading pair list](#get-trading-pairs) query. |
 
 <aside class="notice">
-All API timestamps is returned in microseconds according to the ISO 8601 format
+Semua API timestamp mengembalikan dalam microsecond mengikuti standar format ISO 8601. Hampir semua bahasa pemrograman dan framework modern mendukung format ini.
 </aside>
 
 ## Get order book by trading pair
@@ -589,12 +761,12 @@ All API timestamps is returned in microseconds according to the ISO 8601 format
 ### Query String Parameter
 | parameter | Mandatory | Description |
 | --- | --- | --- |
-| level | Option | 호가창의 상세정보 수준<br><br>1 = 매수호가 및 매도호가<br>2 = 매수 및 매도 주문 각 50개<br>기타 = 호가창 전체 |
+| level | Option | set the detail level of the order book (1 = best bid & ask, 2 = 50 bids & asks, other = all) |
 
 ## Get recent trades
 
 ### HTTP request
-`GET /trading-pairs/<Trading Pair>/trades`
+`GET /trading-pairs/<Trading Pair>/trades?limit=[limit]&pastmax=[pastmax]&latestmin=[latestmin]&after=[after]&before=[before]`
 
 ### URL parameter
 | parameter | Description |
@@ -649,7 +821,7 @@ All API timestamps is returned in microseconds according to the ISO 8601 format
   "price": <i style="color: black;">[Price]</i>,
   "amount": <i style="color: black;">[Amount]</i>,
   "side": <i style="color: black;">[Side]</i>
-}
+}Korean Won
 </code>
 
 | Value | Description |
@@ -661,7 +833,7 @@ All API timestamps is returned in microseconds according to the ISO 8601 format
 | Side | Trading Type (`buy`, `sell`) |
 
 <aside class="notice">
-All API timestamps is returned in microseconds according to the ISO 8601 format
+Semua API timestamp mengembalikan dalam microsecond mengikuti standar format ISO 8601. Hampir semua bahasa pemrograman dan framework modern mendukung format ini.
 </aside>
 
 ## Get 24hr stats by trading pair
@@ -695,7 +867,7 @@ All API timestamps is returned in microseconds according to the ISO 8601 format
 }
 </code>
 
-| 값 | Description |
+| Value | Description |
 | --- | --- |
 | Open | Price 24hrs ago |
 | High | 24-hour peak price |
@@ -705,7 +877,7 @@ All API timestamps is returned in microseconds according to the ISO 8601 format
 | Time | Latest data renewal time |
 
 <aside class="notice">
-All API timestamps is returned in microseconds according to the ISO 8601 format
+Semua API timestamp mengembalikan dalam microsecond mengikuti standar format ISO 8601. Hampir semua bahasa pemrograman dan framework modern mendukung format ini.
 </aside>
 
 ## Get historic rates by trading pair
@@ -786,7 +958,7 @@ All API timestamps is returned in microseconds according to the ISO 8601 format
 ```json
 [
   {
-    "name": "ETH-KRW",
+    "name": "ETH-IDR",
     "open": 780000,
     "high": 784000,
     "low": 756000,
@@ -794,7 +966,7 @@ All API timestamps is returned in microseconds according to the ISO 8601 format
     "volume": 1602.93236136,
     "time": "2018-03-14T05:13:08.364Z"
   }, {
-    "name": "BTC-KRW",
+    "name": "BTC-IDR",
     "open": 10308000,
     "high": 10362500,
     "low": 9901000,
@@ -802,7 +974,7 @@ All API timestamps is returned in microseconds according to the ISO 8601 format
     "volume": 1687.88476801,
     "time": "2018-03-14T05:12:08.245Z"
   }, {
-    "name": "BCH-KRW",
+    "name": "BCH-IDR",
     "open": 1234000,
     "high": 1234000,
     "low": 1120000,
@@ -842,7 +1014,7 @@ All API timestamps is returned in microseconds according to the ISO 8601 format
 
 
 <aside class="notice">
-Description of ResponseAll API timestamps is returned in microseconds according to the ISO 8601 format
+Semua API timestamp mengembalikan dalam microsecond mengikuti standar format ISO 8601. Hampir semua bahasa pemrograman dan framework modern mendukung format ini.
 </aside>
 
 # Errors
@@ -875,3 +1047,5 @@ Description of ResponseAll API timestamps is returned in microseconds according 
 
 
 © Streami, Inc. All right reserved.
+
+

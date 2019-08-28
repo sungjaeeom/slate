@@ -50,17 +50,18 @@ html, body {
 
 
 select {
-  border: 0px;
-  -webkit-appearance: none;  /* 네이티브 외형 감추기 */
-  -moz-appearance: none;
-  appearance: none;
-  background-color: $lang-select-bg;
+  border: 0.5px;
+  // -webkit-appearance: none;  /* 네이티브 외형 감추기 */
+  // -moz-appearance: none;
+  // appearance: none;
+  background-color: $nav-bg;
   color: $lang-select-active-text;
-  position: fixed;
+  // color: $lang-select-active-text;
+  // position: fixed;
   line-height: 30px; 
   vertical-align: middle;
-  right: 2rem;
-  font-size: 0.8em;
+  // left: 20px;
+  // font-size: 0.8em;
   font-weight: bold;
 }
 /* IE 10, 11의 네이티브 화살표 숨기기 */
@@ -215,6 +216,23 @@ select::-ms-expand {
       text-decoration: none;
     }
   }
+  .toc-exchange {
+    padding: 1em $nav-padding 0 $nav-padding;
+    margin-top: 1em;
+    border-top: 1px dashed $nav-footer-border-color;
+    color: $nav-text;
+    font-size: 12px;
+    
+  }
+
+  .toc-lang {
+    padding: 1em $nav-padding 0 $nav-padding;
+    margin-top: 1em;
+    border-top: 1px dashed $nav-footer-border-color;
+    color: $nav-text;
+    font-size: 12px;
+    
+  }
 }
 
 .toc-link, .toc-footer li {
@@ -295,6 +313,21 @@ select::-ms-expand {
     position: fixed;
     z-index: 50;
     border-bottom: 5px solid $lang-select-active-bg;
+  }
+
+  .language-change {
+    width: 150px;
+    line-height: 30px; 
+    background-color: transparent;
+    position: relative;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 999;
+    vertical-align: middle;
+    padding-right: 0.5rem;
+    font-size: 0.8em;
+    font-weight: bold;
   }
 
   .language-change {

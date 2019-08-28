@@ -14,9 +14,11 @@ toc_footers:
 toc_footers_add:
   - API history
   - <a href='javascript:goAPIhistory("")' >latest</a>
-  - <a href='javascript:goAPIhistory("index.v.0.1.html")' >V0.1</a> 
+  - <a href='javascript:goAPIhistory(".v.0.1")' >V0.1</a> 
 
 lang_change: true
+
+exchange: true
 
 search: false
 ---
@@ -31,7 +33,7 @@ REST API를 통해 GOPAX의 일부 기능을 이용하실 수 있도록 아래 �
 
 고팍스의 REST API는 계정/주문 관리 및 공개 마켓 데이터에 대한 엔드포인트를 제공합니다.
 
-<code id="apiUrl" ></code>
+<code id="apiUrl" >https://api.gopax.co.kr</code>
 
 ## API 호출 횟수 제한
 
@@ -377,7 +379,7 @@ custom_headers = {
 }
 								
 def main():
-	req = requests.post(url = 'https://api.gopax.co.kr' + request_path, headers = custom_headers,json=request_body)
+	req = requests.post(url = 'API End point URL' + request_path, headers = custom_headers,json=request_body)
 
 	if req.ok:
 		print(req.text)
@@ -427,7 +429,7 @@ var key = Buffer(secret, 'base64');
 var hmac = crypto.createHmac('sha512', key);
 var sign = hmac.update(what).digest('base64');
 
-var host = 'api.gopax.co.kr';
+var host = 'API End point URL';
 
 var options = {
   method,
@@ -456,7 +458,7 @@ request(options, (err, response, b) => {
 private apiKey = '';
 private apiSecret = '';
 
-const API_HOST = 'https://api.gopax.co.kr';
+const API_HOST = 'API End point URL';
 const VERSION = 'gopax-php-sdk-20171216';
 
 private function request(string $method, string $path, $request = NULL)
@@ -542,6 +544,10 @@ print_r($this->request('POST','/orders',$orderRequest));
 
 <aside class="warning">
 시장가 주문시 amount는 자신이 지불할 자산의 총량(ETH-KRW에서 매수의 경우 KRW, ETH-KRW에서 매도의 경우 ETH)입니다.
+</aside>
+
+<aside class="warning">
+ <a href="#rest-api">API Endpoint URL</a>을 확인하시기 바랍니다.
 </aside>
 
 ### 결과값 설명

@@ -14,9 +14,11 @@ toc_footers:
 toc_footers_add:
   - API history
   - <a href='javascript:goAPIhistory("")' >latest</a>
-  - <a href='javascript:goAPIhistory("index.v.0.1.html")' >V0.1</a> 
+  - <a href='javascript:goAPIhistory(".v.0.1")' >V0.1</a> 
 
 lang_change: true
+
+exchange: true
 
 search: false
 ---

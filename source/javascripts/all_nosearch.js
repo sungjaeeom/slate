@@ -17,38 +17,17 @@ window.onpopstate = function() {
 
 
 var separator = "/";
+var origin = window.location.origin;
 
-var defaultlanguageCode = getLanguageCode();
-var apiPath = getParameterByName("lang","ko");
-var languageCode = apiPath != "ko"?"en":apiPath;
-
-//var referrer = document.referrer;
-//var tmp = referrer.split(separator);
-//if(tmp.length > 1) {
-//  for (var i=0;tmp.length>i;i++){
-//    if(tmp[i] != "" && tmp[i].split(".").length > 2 && tmp[i].indexOf("gopax") > 0){
-//      if(tmp[i].split(".")[tmp[i].split(".").length] != "kr"){
-//        languageCode = "en";
-//      }else{
-//        languageCode = "ko";
-//      }
-//    }else{
-//      languageCode = getLanguage("ko");
-//    }
-//  }
-//}
-
-
-if(defaultlanguageCode == null && defaultlanguageCode != languageCode ){
-  changeLanguage(languageCode);
+var languageCode = getParameterByName("lang","ko");
+if(window.location.pathname.indexOf("html") <0){
+  changeLanguage(languageCode);  
+  setCustomValue("path", window.location.pathname);
 }
 
-function getLanguage(){
+
+function getDisplayLanguage(){
   return window.localStorage.getItem('lang');
-}
-
-function getLanguageCode(){
-  return window.localStorage.getItem('langCode');
 }
 
 function setCustomValue(name,value){
@@ -60,39 +39,43 @@ function getCustomValue(name){
   return window.localStorage.getItem(name);
 }
 
-function removeLanguage(){
-  window.localStorage.removeItem('lang');
-  return;
+function setLanguage() {
+  document.getElementById("languageCode").value = getDisplayLanguage();
+  document.getElementById("exchange").value = getCustomValue("exchange");
+  document.getElementById("apiUrl").innerHTML = getApiHome();
+  setLabel();
 }
 
-function setLanguage() {
-  document.getElementById("languageCode").value = getLanguageCode();
-  document.getElementById("apiUrl").innerHTML = getApiUrl()
+function setLabel(){
+  document.getElementById("exchange_title").innerHTML = getDisplayLanguage()=="ko"?"거래소 :: ":"Exchange :: ";
+  document.getElementById("language_title").innerHTML = getDisplayLanguage()=="ko"?"언&nbsp;&nbsp;&nbsp;어 :: ":"Language :: ";
+}
+
+function changeExchange(exchange){
+  setCustomValue("exchange", exchange);
+  document.getElementById("apiUrl").innerHTML = getApiHome();
 }
 
 function changeLanguage(languageCode){
   if(languageCode != 'ko' && languageCode != 'en' && languageCode != 'id') return;
   var target = "index."+languageCode+".html";
 
-  setCustomValue("langCode", languageCode);
+  setCustomValue("lang", languageCode);
     
   if(languageCode == 'ko') target = "";
-  
   var pathName = window.location.pathname;
-  var path = "/";
-  if(pathName.split(separator).length > 2){
-    path = pathName.split(separator)[2]!= "" ? separator+pathName.split(separator)[1]+separator:pathName;
-  }
-  var origin = window.location.origin;
-  var targetUrl = origin+path+target;
+  var targetUrl = getURL(target);
   var currentUrl = origin+pathName;
-  // alert("targetUrl=="+targetUrl);
-  // alert("currentUrl=="+currentUrl);
   if(targetUrl == currentUrl){            
     return
   }
 
   window.location = targetUrl;
+}
+
+function getURL(target){
+  var path = getCustomValue("path")==null?"/":getCustomValue("path");  
+  return origin+path+target;
 }
 
 function getParameterByName(name, dValue) {
@@ -101,21 +84,32 @@ function getParameterByName(name, dValue) {
   var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
       results = regex.exec(location.search);
   if(results == null){
-      if(getLanguage() == null){
-        setCustomValue("lang", dValue);
+      if(getDisplayLanguage() == null){
+        setCustomValue(name, dValue);
       }
-      return getLanguage();
+      if(getCustomValue("exchange") == null){
+        setCustomValue("exchange", dValue);
+      }
+      return getDisplayLanguage();
   }else{
-      setCustomValue("lang", decodeURIComponent(results[1].replace(/\+/g, " ")));
+      setCustomValue(name, decodeURIComponent(results[1].replace(/\+/g, " ")));
+      setCustomValue("exchange", decodeURIComponent(results[1].replace(/\+/g, " ")));
       return decodeURIComponent(results[1].replace(/\+/g, " "));
   }
 }
 
-function goAPIhistory(target){
+function goAPIhistory(param){
+  var target = "index."+getDisplayLanguage()+param+".html";
+  if(param == "" ){
+    changeLanguage(getDisplayLanguage());
+    return;
+  }else if(param != "" && getDisplayLanguage() =="ko" ) {
+    target = "index"+param+".html";
+  }
   var separator = "/";
-  var pathName = window.location.pathname;
-  var path = pathName.split(separator)[2]!= "" ? separator+pathName.split(separator)[1]+separator:pathName;
-  var origin = window.location.origin;
+  var pathName = window.location.pathname;  
+  var path = getCustomValue("path")==null?"/":getCustomValue("path");
+  // var path = pathName.split(separator)[2]!= "" ? separator+pathName.split(separator)[1]+separator:pathName;
   var targetUrl = origin+path+target;
   var currentUrl = origin+pathName;
   if(targetUrl == currentUrl){
@@ -134,41 +128,35 @@ function apiGitHome(){
 }
 
 function getApiKey(){
-  var path = getLanguage();
-  var apiHome = ""
-  if(path == "en"){
-    apiHome="https://www.gopax.com/account";
-  }else if(path == "id"){
-    apiHome = "https://www.gopax.co.id/account";
-  }else{
-    apiHome = "https://www.gopax.co.kr/account";
-  }
-  openURL(apiHome);
+  openURL(getGopaxHomeURL()+"/account");
 }
 
-function getApiUrl(){
-  var path = getLanguage();
+function getApiHome(){
+  var path = getCustomValue("exchange");
+  
   if(path == "en"){
-      return "https://api.gopax.com";
+    return "https://api.gopax.com";
   }else if(path == "id"){
-      return "https://api.gopax.co.id";
+    return "https://api.gopax.co.id";
   }else{
-      return "https://api.gopax.co.kr";
+    return "https://api.gopax.co.kr";
   }
+  
 }
 
+function getGopaxHomeURL(){
+  var path = getCustomValue("exchange");
+  if(path == "en"){
+    return "https://www.gopax.com";
+  }else if(path == "id"){
+    return "https://www.gopax.co.id";
+  }else{
+    return "https://www.gopax.co.kr";
+  }
+}
 
 function goGopaxHome(){
-  var path = getLanguage();
-  var gopaxHome = ""
-  if(path == "en"){
-    gopaxHome="https://www.gopax.com";
-  }else if(path == "id"){
-    gopaxHome="https://www.gopax.co.id";
-  }else{
-    gopaxHome="https://www.gopax.co.kr";
-  }
-  openURL(gopaxHome);
+  openURL(getGopaxHomeURL());
 }
 
 function openURL(url) {

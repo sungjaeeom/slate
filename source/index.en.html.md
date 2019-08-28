@@ -13,10 +13,12 @@ toc_footers:
 
 toc_footers_add:
   - API history
-  - <a href='javascript:goAPIhistory("index.en.html")' >latest</a>
-  - <a href='javascript:goAPIhistory("index.en.v.0.1.html")' >V0.1</a> 
+  - <a href='javascript:goAPIhistory("")' >latest</a>
+  - <a href='javascript:goAPIhistory(".v.0.1")' >V0.1</a> 
 
 lang_change: true
+
+exchange: true
 
 search: false
 ---
@@ -31,7 +33,7 @@ The following documents are shared to enable you to use some of the features of 
 
 GOPAX REST API provides endpoints for account/order management and public market data.
 
-<code id="apiUrl" ></code>
+<code id="apiUrl" >https://api.gopax.com</code>
 
 ## API Call Rate Limit
 
@@ -131,7 +133,7 @@ Content-Type: application/json
 </code>
 
 <aside class="warning">
-The above example cannot be used for testing. Create it through <a href="javascript:getApiKey()">personal API Key</a>
+The above example cannot be used for testing. Create it through personal <a href="javascript:getApiKey()">API Key</a>
 </aside>
 
 # Authenticated Calls
@@ -381,7 +383,7 @@ custom_headers = {
 }
 								
 def main():
-	req = requests.post(url = 'https://api.gopax.co.kr' + request_path, headers = custom_headers,json=request_body)
+	req = requests.post(url = 'API Endpoint URL' + request_path, headers = custom_headers,json=request_body)
 
 	if req.ok:
 		print(req.text)
@@ -432,7 +434,7 @@ var key = Buffer(secret, 'base64');
 var hmac = crypto.createHmac('sha512', key);
 var sign = hmac.update(what).digest('base64');
 
-var host = 'api.gopax.co.kr';
+var host = 'API Endpoint URL without protocol';
 
 var options = {
   method,
@@ -461,7 +463,7 @@ request(options, (err, response, b) => {
 private apiKey = '';
 private apiSecret = '';
 
-const API_HOST = 'https://api.gopax.co.kr';
+const API_HOST = 'API Endpoint URL';
 const VERSION = 'gopax-php-sdk-20171216';
 
 private function request(string $method, string $path, $request = NULL)
@@ -586,6 +588,10 @@ print_r($this->request('POST','/orders',$orderRequest));
 
 <aside class="notice">
 All API timestamps is returned in microseconds according to the ISO 8601 format.
+</aside>
+
+<aside class="warning">
+Please check <a href="#api-endpoint-url">API Endpoint URL</a>.
 </aside>
 
 ## Cancel order by order ID

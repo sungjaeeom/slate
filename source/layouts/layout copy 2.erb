@@ -102,28 +102,35 @@ under the License.
           <% end %>
         </ul>
       <% end %>
+      
+      # <% if current_page.data.exchange or current_page.data.lang_change %>
+      #   <div class="toc-lang">
+      # <% end %>      
 
-      <% if current_page.data.exchange %>
-        <div class="toc-exchange">              
-          <label for="exchange" id="exchange_title" style="line-height: 30px;">Exchange :: </label> 
-          <select id="exchange" onChange="javascript:changeExchange(this.value)" style="width:100px;">
-            <option value="ko">Korea</option>
-            <option value="en">Global</option>
-            <option value="id">Indonesia</option>
-          </select>
-        </div>
-      <% end %>
+          <% if current_page.data.exchange %>
+          <div class="toc-lang">              
+            Exchange 
+            <select id="exchange" onChange="javascript:changeExchange(this.value)" width="10" align="center">
+              <option value="ko">KR</option>
+              <option value="en">COM</option>
+              <option value="id">ID</option>
+            </select>
+          <div>
+          <% end %>
 
-      <% if current_page.data.lang_change %>
-        <div class="toc-lang">
-          <label for="languageCode" id="language_title" style="line-height: 30px;">Language :: </label> 
-          <select id="languageCode"  onChange="javascript:changeLanguage(this.value)" style="width:100px;">
-            <option value="ko">한국어</option>
-            <option value="en">English</option>
-            <option value="id">Indonesian</option>
-          </select>
-        </div>
-      <% end %>
+          <% if current_page.data.lang_change %>
+          <div class="toc-lang">
+            Language
+            <select id="languageCode"  onChange="javascript:changeLanguage(this.value)" width="15" align="center">
+              <option value="ko">한국어</option>
+              <option value="en">English</option>
+              <option value="id">Indonesia</option>
+            </select>
+          </div>
+          <% end %>
+      # <% if current_page.data.exchange or current_page.data.lang_change %>
+      #   </div>
+      # <% end %>
 
     </div>
     <div class="page-wrapper">
